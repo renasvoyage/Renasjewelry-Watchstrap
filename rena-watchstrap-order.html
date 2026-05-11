@@ -292,6 +292,58 @@ body{background:var(--cream);color:var(--text);font-family:'Noto Serif TC',serif
 <div id="toast"></div>
 
 <script>
+
+// ══ 圖片設定（在這裡換圖，不用改其他地方）══
+const IMAGES = {
+  hero: '',        // Hero 背景圖網址（留空 = 預設咖啡色）
+  charm: 'https://drive.google.com/uc?export=view&id=1UrR9aWG72_b8efrHP-tjthIOBBsE4_sY',
+  styleA: '',      // 款式 A 圖片網址
+  styleB: '',      // 款式 B
+  styleC: '',      // 款式 C
+  styleD: '',      // 款式 D
+  styleE: '',      // 款式 E
+  styleF: '',      // 款式 F
+  styleG: '',      // 款式 G
+  styleH: '',      // 款式 H
+  styleI: '',      // 款式 I
+};
+
+// 自動套用圖片
+function applyImages() {
+  // Hero 背景
+  if (IMAGES.hero) {
+    document.querySelector('.hero').style.backgroundImage = `url(${IMAGES.hero})`;
+    document.querySelector('.hero').style.backgroundSize = 'cover';
+    document.querySelector('.hero').style.backgroundPosition = 'center';
+  }
+  // 墜飾圖
+  if (IMAGES.charm) {
+    const charmImg = document.querySelector('.charm-img-box img');
+    if (charmImg) charmImg.src = IMAGES.charm;
+  }
+  // 款式圖
+  const styleKeys = ['A','B','C','D','E','F','G','H','I'];
+  styleKeys.forEach(key => {
+    const url = IMAGES['style'+key];
+    if (url) {
+      const cards = document.querySelectorAll('.style-card');
+      cards.forEach(card => {
+        if (card.querySelector('.sname') && card.querySelector('.sname').textContent.includes('款式 '+key)) {
+          const ph = card.querySelector('.sph');
+          if (ph) {
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = 's-img';
+            img.alt = '款式'+key;
+            ph.parentNode.replaceChild(img, ph);
+          }
+        }
+      });
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', applyImages);
+
 // ══ 設定你的 Notion Token ══
 // 步驟：notion.so/my-integrations → 建立 Integration → 複製 token
 // 再把 Integration invite 進「客製排單」資料庫
