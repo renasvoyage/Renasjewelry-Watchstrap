@@ -345,6 +345,7 @@ async function sub(e){
   const btn=document.getElementById('sbtn');
   btn.disabled=true;btn.textContent='送出中…';
   const fd=Object.fromEntries(new FormData(e.target));
+  fd.charm=document.querySelector('input[name="charm"]').value;
   const now=new Date();
   const styleText=chosen.code?`款式${chosen.code}（${chosen.name}）${chosen.price}`:'未選擇';
   const payload={
