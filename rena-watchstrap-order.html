@@ -203,15 +203,19 @@ body{background:#fdfcfa;color:var(--text);font-family:'Noto Serif TC',serif;min-
   <div class="form-sec">
     <div class="ftitle">基本資料</div>
     <div class="fstack">
-      <div class="frow">
-        <div class="field">
-          <label>手錶型號和品牌 <span class="req">*</span></label>
-          <input type="text" name="watch_model" placeholder="例：Apple Watch S9 45mm" required>
-        </div>
-        <div class="field">
-          <label>蝦皮帳號或 IG 帳號 <span class="req">*</span></label>
-          <input type="text" name="account" placeholder="例：@rena_jewelry" required>
-        </div>
+      <div class="field">
+        <label>您是透過哪個管道聯繫我的？<span class="req">*</span></label>
+        <select name="source" id="source-select" onchange="updateAccountLabel()" required>
+          <option value="">請選擇</option>
+          <option value="Ig">Instagram（IG）</option>
+          <option value="蝦皮">蝦皮購物</option>
+          <option value="Line">Line</option>
+        </select>
+      </div>
+      <div class="field">
+        <label id="account-label">您的帳號 <span class="req">*</span></label>
+        <input type="text" name="account" id="account-input" placeholder="請先選擇聯繫管道" required>
+        <div class="hint" id="account-hint">選擇聯繫管道後填入對應帳號</div>
       </div>
     </div>
   </div>
@@ -219,6 +223,10 @@ body{background:#fdfcfa;color:var(--text);font-family:'Noto Serif TC',serif;min-
   <div class="form-sec">
     <div class="ftitle">錶頭資訊</div>
     <div class="fstack">
+      <div class="field">
+        <label>手錶型號和品牌 <span class="req">*</span></label>
+        <input type="text" name="watch_model" placeholder="例：Apple Watch S9 45mm" required>
+      </div>
       <div class="frow">
         <div class="field">
           <label>錶頭大小 <span class="req">*</span></label>
@@ -271,12 +279,11 @@ body{background:#fdfcfa;color:var(--text);font-family:'Noto Serif TC',serif;min-
       </div>
     </div>
   </div>
-
-
+  </div>
 
   <div class="submit-area">
     <p class="submit-note">
-      送出後請<strong>務必私訊 IG 或蝦皮</strong>告知 Rena 已填寫表單<br>
+      送出後請<strong>務必透過您選擇的管道</strong>私訊告知 Rena 已填寫表單<br>
       才能為您確認內容並進一步討論細節 ✨<br>
       <span style="color:var(--gold-dark)">製作時間約 7–10 個工作天，感謝您的耐心等候 ♡</span>
     </p>
@@ -294,6 +301,31 @@ body{background:#fdfcfa;color:var(--text);font-family:'Noto Serif TC',serif;min-
 <div id="toast"></div>
 
 <script>
+function updateAccountLabel() {
+  const source = document.getElementById('source-select').value;
+  const label = document.getElementById('account-label');
+  const input = document.getElementById('account-input');
+  const hint = document.getElementById('account-hint');
+  
+  if (source === 'Ig') {
+    label.innerHTML = 'IG 帳號 <span class="req">*</span>';
+    input.placeholder = '請填寫您的帳號';
+    hint.textContent = '例：@rena_jewelry，方便 Rena 私訊確認';
+  } else if (source === '蝦皮') {
+    label.innerHTML = '蝦皮帳號 <span class="req">*</span>';
+    input.placeholder = '請填寫您的帳號';
+    hint.textContent = '例：rena_jewelry，方便 Rena 在蝦皮聯繫您';
+  } else if (source === 'Line') {
+    label.innerHTML = 'Line ID <span class="req">*</span>';
+    input.placeholder = '請填寫您的帳號';
+    hint.textContent = '例：@rena_jewelry，方便 Rena 加您';
+  } else {
+    label.innerHTML = '您的帳號 <span class="req">*</span>';
+    input.placeholder = '請填寫您的帳號';
+    hint.textContent = '請先選擇上方聯繫管道';
+  }
+}
+
 const TOKEN = 'ntn_q74662351271Sl1n52ONqKOEUzK5C8DUZVmhdZZuIKw5x4';
 const PROXY = 'https://corsproxy.io/?url=https://api.notion.com/v1/pages';
 const DB_ID = '31f1bd05b4f7800dbbf1000bb5071b01';
@@ -317,6 +349,7 @@ async function sub(e){
   const styleText=chosen.code?`款式${chosen.code}（${chosen.name}）${chosen.price}`:'未選擇';
   const payload={
     account: fd.account,
+    source: fd.source,
     watch_model: fd.watch_model,
     watch_size: fd.watch_size,
     watch_color: fd.watch_color,
